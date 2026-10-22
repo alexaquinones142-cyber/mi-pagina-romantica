@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#fff0f5">
+<title>Una pregunta para ti 💗</title>
+<style>
+  :root { --rosa:#f6a6c1; --rosa-oscuro:#c94f7c; --tinta:#553344; --crema:#fff8fb; }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; min-height:100vh; display:grid; place-items:center; padding:22px;
+    font-family: "Trebuchet MS", system-ui, sans-serif; color:var(--tinta);
+    background: radial-gradient(circle at top left,#ffe1ec 0,transparent 38%),
+                radial-gradient(circle at bottom right,#f7d9ff 0,transparent 35%), #fff8fb;
+    overflow-x:hidden;
+  }
+  .hearts { position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:0; }
+  .heart { position:absolute; bottom:-40px; opacity:.48; animation: floatUp linear infinite; }
+  @keyframes floatUp { to { transform:translateY(-115vh) rotate(25deg); opacity:0; } }
+  .card {
+    width:min(100%, 560px); position:relative; z-index:1; text-align:center;
+    padding:clamp(24px,6vw,42px); border:1px solid #f7d5e2; border-radius:28px;
+    background:rgba(255,255,255,.9); box-shadow:0 18px 55px rgba(183,91,128,.15);
+  }
+  .sparkle { font-size:2rem; margin-bottom:8px; }
+  h1 { font-size:clamp(1.8rem,6vw,2.55rem); line-height:1.15; margin:10px 0 16px; color:#a83f69; }
+  p { font-size:1.04rem; line-height:1.7; margin:12px 0; }
+  .small { color:#8d6a7a; font-size:.92rem; }
+  .divider { color:#e6a0bb; letter-spacing:8px; margin:22px 0; }
+  .buttons { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-top:24px; }
+  button {
+    border:0; border-radius:999px; padding:13px 20px; font:inherit; font-weight:700;
+    cursor:pointer; transition:transform .18s ease, box-shadow .18s ease;
+  }
+  button:hover { transform:translateY(-2px); box-shadow:0 8px 18px #d58aa844; }
+  button:focus-visible { outline:3px solid #8e3d60; outline-offset:3px; }
+  .primary { background:linear-gradient(135deg,#ef8fb2,#d85b8d); color:white; }
+  .secondary { background:#fff0f5; color:#a83f69; border:1px solid #f4c5d7; }
+  .hidden { display:none; }
+  .letter { background:#fff7fa; border:1px dashed #e8a6c0; border-radius:18px; padding:18px; margin:18px 0; }
+  .footer { margin-top:24px; font-size:.8rem; color:#a58493; }
+  .answer { font-size:1.2rem; font-weight:700; color:#a83f69; }
+  .confetti { font-size:1.7rem; letter-spacing:5px; }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation:none!important; transition:none!important; } }
+</style>
+</head>
+<body>
+<div class="hearts" id="hearts" aria-hidden="true"></div>
+<main class="card">
+  <section id="inicio">
+    <div class="sparkle">💌 ✨</div>
+    <p class="small">Tengo algo bonito que preguntarte...</p>
+    <h1>Hola, personita bonita</h1>
+    <p>Preparé esta pequeña sorpresa pensando en ti. No es nada complicado; solo quería sacarte una sonrisa y decirte algo que llevo un ratito queriendo preguntarte. 💗</p>
+    <div class="divider">♡ ♡ ♡</div>
+    <p>¿Te animas a descubrirlo?</p>
+    <div class="buttons">
+      <button class="primary" onclick="mostrar('pregunta')">¡Claro que sí! 🌷</button>
+      <button class="secondary" onclick="mostrar('curiosa')">Me dio curiosidad 🙈</button>
+    </div>
+  </section>
+
+  <section id="curiosa" class="hidden">
+    <div class="sparkle">🌸</div>
+    <h1>Qué curiosa...</h1>
+    <p>Bueno, te daré una pista: tiene que ver con pasar un ratito contigo, conversar, reírnos y crear un recuerdo bonito.</p>
+    <div class="buttons">
+      <button class="primary" onclick="mostrar('pregunta')">Ahora sí, dime 💗</button>
+      <button class="secondary" onclick="mostrar('inicio')">Volver</button>
+    </div>
+  </section>
+
+  <section id="pregunta" class="hidden">
+    <div class="sparkle">💖 🌷 💖</div>
+    <p class="small">Aquí viene la pregunta...</p>
+    <h1>¿Te gustaría salir conmigo?</h1>
+    <p>Podríamos ir por algo rico, dar un paseo o hacer lo que más te guste. Lo importante para mí sería compartir ese momento contigo. 😊</p>
+    <p class="small">Al elegir una respuesta, se abrirá WhatsApp con un mensaje preparado para avisarme cuál escogiste. Tú decides si enviarlo. 💌</p>
+    <div class="buttons">
+      <button class="primary" onclick="elegirRespuesta('si')">¡Sí, me encantaría!</button>
+      <button class="secondary" onclick="elegirRespuesta('pensarlo')">Lo voy a pensar 🥹</button>
+      <button class="secondary" onclick="elegirRespuesta('no')">Prefiero que no</button>
+    </div>
+  </section>
+
+  <section id="si" class="hidden">
+    <div class="confetti">💗 ✨ 🌷 ✨ 💗</div>
+    <h1>¡Siii! 💕</h1>
+    <p class="answer">¡No sabes la felicidad que tengo en estos momentos! 🥹💗</p>
+    <div class="letter">
+      <h2 style="margin-top:0;color:#a83f69">¡Ya tienes una cita conmigo! 💖</h2>
+      <p>📅 Domingo 25 de octubre de 2026</p>
+      <p>🕓 Hora elegida: <strong id="horaElegidaTexto">Ella puede escoger la hora que prefiera</strong></p>
+      <label for="horaElegida" style="display:block;margin:12px 0 6px;font-weight:700">¿A qué hora te gustaría salir?</label>
+      <input id="horaElegida" type="time" aria-label="Escoge la hora de la cita" style="font:inherit;padding:10px;border:1px solid #f4c5d7;border-radius:12px;background:#fff;width:min(100%,220px);color:#553344" onchange="actualizarHoraElegida()">
+      <div class="buttons" style="margin-top:12px">
+        <button class="primary" id="confirmarHoraBtn" onclick="confirmarHoraElegida()">Confirmar esta hora 💗</button>
+      </div>
+      <p id="confirmacionHora" class="small" aria-live="polite">Escoge una hora y confirma tu elección.</p>
+      <p>Quiero que sea un plan en el que las dos nos sintamos cómodas. ¡Estoy contenta por ese día y no veo la hora de que llegue! 💗</p>
+    </div>
+    
+    <div class="buttons">
+      <button class="primary" id="enviarRespuestaHoraBtn" onclick="enviarRespuestaYHora()" disabled>Enviar mi respuesta y hora</button>
+      <button class="primary" onclick="mostrar('pregunta')">Volver a la opción de las respuestas</button>
+      <button class="secondary" onclick="mostrar('inicio')">Volver al inicio</button>
+    </div>
+    <p id="aviso" class="small" aria-live="polite"></p>
+  </section>
+
+  <section id="pensarlo" class="hidden">
+    <div class="sparkle">🌷</div>
+    <h1>No hay prisa</h1>
+    <p>Está bien tomarte tu tiempo. Yo te estaré esperando hasta que me digas que sí, porque la esperanza es lo último que se pierde. 💗</p>
+    
+    <p class="small">Aquí estaré, esperando con paciencia. 🌸</p>
+    <div class="buttons">
+      <button class="primary" onclick="avisarPorWhatsApp('Lo voy a pensar 🥹')">Avisarme por WhatsApp 💬</button>
+      <button class="secondary" onclick="mostrar('pregunta')">Volver a la opción de las respuestas</button>
+      <button class="secondary" onclick="mostrar('inicio')">Volver al inicio</button>
+    </div>
+  </section>
+
+  <section id="no" class="hidden">
+    <div class="sparkle">🥺</div>
+    <h1>Ay… mi corazoncito tenía esperanza</h1>
+    <p>Confieso que imaginaba que dirías que sí, y leer tu respuesta me pone un poquito triste. 💔</p>
+    
+
+    <div class="buttons">
+      <button class="primary" onclick="avisarPorWhatsApp('Prefiero que no')">Avisarme por WhatsApp 💬</button>
+      <button class="secondary" onclick="mostrar('pregunta')">Volver a la opción de las respuestas</button>
+      <button class="secondary" onclick="mostrar('inicio')">Volver al inicio</button>
+    </div>
+  </section>
+  <div class="footer">Hecho con cariño y un poquito de valentía 💗</div>
+</main>
+<script>
+  function avisarPorWhatsApp(respuesta) {
+    const telefono = '573025594040';
+    const mensaje = 'La respuesta que eligió en tu página romántica es: ' + respuesta + '. 💌';
+    const url = 'https://wa.me/' + telefono + '?text=' + encodeURIComponent(mensaje);
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
+  function actualizarHoraElegida() {
+    const campo = document.getElementById('horaElegida');
+    const texto = document.getElementById('horaElegidaTexto');
+    if (!campo || !texto) return;
+    const confirmacion = document.getElementById('confirmacionHora');
+    const enviarBtn = document.getElementById('enviarRespuestaHoraBtn');
+    if (enviarBtn) enviarBtn.disabled = true;
+    if (confirmacion) confirmacion.textContent = 'Confirma la hora cuando estés segura de tu elección.';
+    if (!campo.value) {
+      texto.textContent = 'Ella puede escoger la hora que prefiera';
+      return;
+    }
+    const [h, m] = campo.value.split(':').map(Number);
+    const periodo = h >= 12 ? 'de la tarde' : 'de la mañana';
+    const hora12 = h % 12 || 12;
+    texto.textContent = `a las ${hora12}:${String(m).padStart(2, '0')} ${periodo}`;
+  }
+
+  function confirmarHoraElegida() {
+    const campo = document.getElementById('horaElegida');
+    const confirmacion = document.getElementById('confirmacionHora');
+    const enviarBtn = document.getElementById('enviarRespuestaHoraBtn');
+    if (!campo || !campo.value) {
+      if (confirmacion) confirmacion.textContent = 'Primero escoge la hora que prefieras. 💗';
+      return;
+    }
+    actualizarHoraElegida();
+    if (confirmacion) confirmacion.textContent = '¡Hora confirmada! 💗 Si quieres, ahora puedes enviar tu respuesta.';
+    if (enviarBtn) enviarBtn.disabled = false;
+  }
+
+  function mostrar(id) {
+    document.querySelectorAll('main section').forEach(s => s.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+  function elegirRespuesta(opcion) {
+    const respuestas = {
+      si: '¡Sí, me encantaría salir contigo! 💗',
+      pensarlo: 'Quiero pensarlo 🥹',
+      no: 'Prefiero que no 💛'
+    };
+    mostrar(opcion);
+    // WhatsApp se abre solo si la persona decide compartir su respuesta y la hora.
+  }
+  function copiarRespuesta(texto) {
+    const aviso = document.getElementById('aviso');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(texto).then(() => aviso.textContent = '¡Respuesta copiada! Puedes pegarla en el chat. 💌')
+      .catch(() => aviso.textContent = texto);
+    } else { aviso.textContent = texto; }
+  }
+  function enviarRespuestaYHora() {
+    const campo = document.getElementById('horaElegida');
+    const aviso = document.getElementById('aviso');
+    const enviarBtn = document.getElementById('enviarRespuestaHoraBtn');
+    if (!campo || !campo.value || (enviarBtn && enviarBtn.disabled)) {
+      if (aviso) aviso.textContent = 'Primero escoge la hora que prefieras. 💗';
+      return;
+    }
+    const [h, m] = campo.value.split(':').map(Number);
+    const periodo = h >= 12 ? 'de la tarde' : 'de la mañana';
+    const hora12 = h % 12 || 12;
+    const horaTexto = `${hora12}:${String(m).padStart(2, '0')} ${periodo}`;
+    const mensaje = `¡Respondió que sí le encantaría salir contigo! 💗 La hora que escogió para la cita es: ${horaTexto}.`;
+    const telefono = '573025594040';
+    const url = 'https://wa.me/' + telefono + '?text=' + encodeURIComponent(mensaje);
+    window.open(url, '_blank', 'noopener,noreferrer');
+    if (aviso) aviso.textContent = 'Se abrió WhatsApp con la respuesta y la hora elegida. Para avisarte, debe pulsar Enviar. 💌';
+  }
+
+  const contenedor = document.getElementById('hearts');
+  const simbolos = ['♡','♥','✦','💗'];
+  for (let i=0; i<16; i++) {
+    const el = document.createElement('span');
+    el.className = 'heart';
+    el.textContent = simbolos[i % simbolos.length];
+    el.style.left = (Math.random()*100) + '%';
+    el.style.animationDuration = (9 + Math.random()*12) + 's';
+    el.style.animationDelay = (-Math.random()*18) + 's';
+    el.style.fontSize = (14 + Math.random()*20) + 'px';
+    contenedor.appendChild(el);
+  }
+</script>
+</body>
+</html>
